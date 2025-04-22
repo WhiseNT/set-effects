@@ -33,6 +33,10 @@ function EffectiveSet(items,id) {
     })
     
 }
+EffectiveSet.prototype.setCounts = function(number) {
+    this.counts = number
+    return this
+}
 EffectiveSet.prototype.getShadow = function() {
     return this.shadow
 }
@@ -43,6 +47,7 @@ EffectiveSet.prototype.getShadow = function() {
 EffectiveSet.prototype.setName = function(name) {
     this.name = name
     this.shadow.name = name
+    return this
 }
 /**
  * 
@@ -59,6 +64,7 @@ EffectiveSet.prototype.addPotionEffect = function(mobEffect,amplifier,ambient,sh
         showParticles:showParticles
     }
     this.potionEffects.push(obj)
+    return this
 }
 /**
  * 
@@ -75,6 +81,7 @@ EffectiveSet.prototype.addAttribute = function(attribute,uuid,d,operation) {
         uuid:uuid
     }
     this.attributes.push(obj)
+    return this
 }
 /**
  * 
@@ -92,30 +99,39 @@ EffectiveSet.prototype.triggerFactory = function(eventType,event,set) {
 }
 EffectiveSet.prototype.injectHurtFunc = function(callback) {
     this.hooks.hurt.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectAttackFunc = function(callback) {
     this.hooks.attack.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectEquiptFunc = function(callback) {
     this.hooks.equipt.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectUnequiptFunc = function(callback) {
     this.hooks.unequipt.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectTickFunc = function(callback) {
     this.hooks.tick.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectHealFunc = function(callback) {
     this.hooks.heal.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectJumpFunc = function(callback) {
     this.hooks.jump.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectFallFunc = function(callback) {
     this.hooks.fall.push(callback)
+    return this
 }
 EffectiveSet.prototype.injectDeathFunc = function(callback) {
     this.hooks.death.push(callback)
+    return this
 }
 /**
  * 用于存储所有套装信息的表,会根据该表内注册的信息来获取对应的套装

@@ -76,11 +76,20 @@ SetRangeManager_.prototype.armorAndCurios = function() {
 SetRangeManager_.prototype.all = function() {
     this.type = "all"
 }
+/**
+ * 
+ * @param {Internal.ItemStack_} item 
+ * @param {SlotTypes_} slot 
+ */
 SetRangeManager_.prototype.addBlackList = function(item,slot) {
     if (this.blackList[item] == undefined) this.blackList[item] = []
     this.blackList[item].push(slot)
-    
 }
+/**
+ * 
+ * @param {Internal.ItemStack_} item 
+ * @param {SlotTypes_} slot 
+ */
 SetRangeManager_.prototype.addWhiteList = function(item,slot) {
     if (this.blackList[item] == undefined) this.blackList[item] = []
     let slots = ["weapon","armor","curios"]
@@ -89,11 +98,21 @@ SetRangeManager_.prototype.addWhiteList = function(item,slot) {
     })
     
 }
+/**
+ * 
+ * @param {Internal.ItemStack_} item 
+ * @param {SlotTypes_} slot 
+ */
 SetRangeManager_.prototype.removeBlackList = function(item,slot) {
     if (this.blackList[item] != undefined && this.blackList[item].find(slot) != undefined) {
         this.blackList[item] = this.blackList[item].filter(e=>e != slot)
     }
 }
+/**
+ * 
+ * @param {Internal.ItemStack_} item 
+ * @param {SlotTypes_} slot 
+ */
 SetRangeManager_.prototype.inBlackList = function(item,slot) {
     if (this.blackList[item.id] != undefined) {
         if (this.blackList[item.id].toString().includes(slot)) {
