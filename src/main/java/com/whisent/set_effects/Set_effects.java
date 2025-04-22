@@ -50,7 +50,7 @@ public class Set_effects {
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         if (Files.exists(probePath)) {
-            /*
+
                 try {
                     if (!Files.exists(filePath)) {
 
@@ -64,7 +64,7 @@ public class Set_effects {
                 } catch (IOException e) {
                     throw new RuntimeException("Failed to copy set_effects.d.ts", e);
                 }
-                */
+
         }
     }
     private void commonSetup(final FMLCommonSetupEvent event) {

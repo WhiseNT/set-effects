@@ -36,29 +36,30 @@ declare class EffectiveSet_ {
     shadow: ShadowSetObject;
 
     getShadow(): ShadowSetObject;
-    setName(name: string): void;
+    setName(name: string): EffectiveSet_;
+    setCounts(number: number): EffectiveSet_
     addPotionEffect(
         mobEffect: Internal.MobEffect_,
         amplifier: number,
         ambient: boolean,
         showParticles: boolean
-    ): void;
+    ): EffectiveSet_;
     addAttribute(
         attribute: Internal.Attribute_,
         uuid: string,
         d: number,
         operation: Internal.AttributeModifier$Operation_
-    ): void;
+    ): EffectiveSet_;
     triggerFactory(eventType: keyof EffectiveSet_['hooks'], event: Internal.ForgeEventWrapper_, set: EffectiveSet_): void;
-    injectHurtFunc(callback: (event: Internal.LivingHurtEvent_, set: EffectiveSet_) => void): void;
-    injectAttackFunc(callback: (event: Internal.LivingAttackEvent_, set: EffectiveSet_) => void): void;
-    injectEquiptFunc(callback: (event: Internal.LivingEquipmentChangeEvent_, set: EffectiveSet_) => void): void;
-    injectUnequiptFunc(callback: (event: Internal.LivingEquipmentChangeEvent_, set: EffectiveSet_) => void): void;
-    injectTickFunc(callback: (event: Internal.LivingEvent$LivingTickEvent_, set: EffectiveSet_) => void): void;
-    injectHealFunc(callback: (event: Internal.LivingHealEvent_, set: EffectiveSet_) => void): void;
-    injectJumpFunc(callback: (event: Internal.LivingEvent$LivingJumpEvent_, set: EffectiveSet_) => void): void;
-    injectFallFunc(callback: (event: Internal.LivingFallEvent_, set: EffectiveSet_) => void): void;
-    injectDeathFunc(callback: (event: Internal.LivingDeathEvent_, set: EffectiveSet_) => void): void;
+    injectHurtFunc(callback: (event: Internal.LivingHurtEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectAttackFunc(callback: (event: Internal.LivingAttackEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectEquiptFunc(callback: (event: Internal.LivingEquipmentChangeEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectUnequiptFunc(callback: (event: Internal.LivingEquipmentChangeEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectTickFunc(callback: (event: Internal.LivingEvent$LivingTickEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectHealFunc(callback: (event: Internal.LivingHealEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectJumpFunc(callback: (event: Internal.LivingEvent$LivingJumpEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectFallFunc(callback: (event: Internal.LivingFallEvent_, set: EffectiveSet_) => void): EffectiveSet_;
+    injectDeathFunc(callback: (event: Internal.LivingDeathEvent_, set: EffectiveSet_) => void): EffectiveSet_;
 }
 
 declare class SetsMap_ {
@@ -81,7 +82,7 @@ declare class SetEffects_ {
     setsMap: SetsMap;
     dataUpdater: DataUpdater;
     setRangeManager: SetRangeManager_;
-    setEvents: SetEvents_;
+    setEvents: SetEventJS;
 }
 declare class DataUpdater {
     /**
@@ -99,31 +100,17 @@ declare class SetsTooltipInjectHelper_ {
 
     }
 
-    /**
-     * 注入Shift键按下时的工具提示回调
-     * @param set 套装ID或套装实例
-     * @param callback 回调函数
-     */
+
     injectShiftTooltipFunc(
         set: string | EffectiveSet,
         callback: TooltipCallback
     ): void;
 
-    /**
-     * 注入Shift键未按下时的工具提示回调
-     * @param set 套装ID或套装实例
-     * @param callback 回调函数
-     */
     injectUnshiftTooltipFunc(
         set: string | EffectiveSet_,
         callback: TooltipCallback
     ): void;
 
-    /**
-     * 注入始终显示的工具提示回调
-     * @param set 套装ID或套装实例
-     * @param callback 回调函数
-     */
     injectAlwaysTooltipFunc(
         set: string | EffectiveSet_,
         callback: TooltipCallback
@@ -146,15 +133,6 @@ declare class SetsTooltipInjectHelper_ {
         set: string | EffectiveSet_
     ): boolean;
 
-    /**
-     * 触发工具提示回调
-     * @param type 工具提示类型 ('shift' | 'unshift')
-     * @param event 工具提示事件
-     * @param item 物品堆栈
-     * @param advance 高级工具提示对象
-     * @param text 工具提示文本数组
-     * @param set 套装实例
-     */
     triggerFactory(
         type: 'shift' | 'unshift',
         event: Internal.TooltipEvent_,
@@ -165,9 +143,6 @@ declare class SetsTooltipInjectHelper_ {
     ): void;
 }
 
-/**
- * 工具提示回调函数类型
- */
 type TooltipCallback = (
     event: Internal.TooltipEvent_,
     item: Internal.ItemStack_,
@@ -199,7 +174,13 @@ declare class SlotTypes_ {
     WEAPON : string
     CURIOS : string
 }
+
 declare class SetRegister_ {
+    /**
+     * This method will return a new EffectiveSet instance.
+     * @param items 
+     * @param id 
+     */
     create(items : Internal.Iterable<Internal.ItemStack>,id : string) : EffectiveSet_
 }
 declare class SetModification_ {
@@ -209,8 +190,16 @@ declare class SetModification_ {
 }
 declare class SetEventJS {
     /**
-     * @param callback 
+     * Use registry event to create a new armor set.
+     * the create method will return a EffectiveSet instance
+     * so you can directly edit to customized the set properties.
      */
     registry(callback:(event : SetRegister_) => void) : void
+    /**
+     * For the sets had been registered,you can use modification event to edit.
+     * getSet method will return a set instance
+     * getSets method will return a Array<EffectiveSet>
+     * getMaps method will return the SetsMap,which has all infomations of the Sets.
+     */
     modification(callback:(event : SetModification_) => void) : void
 }
