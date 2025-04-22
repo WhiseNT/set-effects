@@ -1,0 +1,16 @@
+{
+  "id": "set_effects",
+  "name": "Set Effects",
+  "description": "This is a ContentPack Mod that allows you to customize the effects of full armor sets.",
+  "authors": ["WhiseNT"],
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "type": "REQUIRED",
+      "id": "kubejs",
+      "versionRange":"[1.0.0,)",
+      "ordering":"BEFORE"
+    }
+    
+  ]
+}
