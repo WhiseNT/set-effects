@@ -131,7 +131,7 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    runtimeOnly(fg.deobf("com.whisent:kubeloader-${minecraft_version}-${forge_version}:0.0.5"))
+    runtimeOnly(fg.deobf("com.whisent:kubeloader-${minecraft_version}-${forge_version}:0.0.5-a"))
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

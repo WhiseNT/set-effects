@@ -83,6 +83,7 @@ declare class SetEffects_ {
     dataUpdater: DataUpdater;
     setRangeManager: SetRangeManager_;
     setEvents: SetEventJS;
+    enableTick: boolean;
 }
 declare class DataUpdater {
     /**
