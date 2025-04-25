@@ -38,10 +38,12 @@ SetsTooltipInjectHelper.prototype.getFlag = function (set) {
 }
 
 SetsTooltipInjectHelper.prototype.triggerFactory = function(type,event,item,advance,text,set,count) {
-    if (this.hooks[type][set.id] == undefined) return
-    this.hooks[type][set.id].forEach(func=>{
-        func(event,item,advance,text,set,count)
-    })
+    if (this.hooks[type] != undefined && this.hooks[type][set.id] != undefined) {
+        this.hooks[type][set.id].forEach(func=>{
+            func(event,item,advance,text,set,count)
+        })
+    }
+    
 }
 const TooltipHelperInstance = new SetsTooltipInjectHelper()
 ContentPacks.putShared('com.whisent.seteffects.tooltip',TooltipHelperInstance)

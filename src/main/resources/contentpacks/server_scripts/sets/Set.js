@@ -157,6 +157,7 @@ function SharedObject() {
     this.dataUpdater;
     this.setRangeManager = SetRangeManager;
     this.setEvents = SetEvents;
+    this.enableTick = true;
 }
 const Shared = new SharedObject()
 ContentPacks.putShared('com.whisent.seteffects',Shared)

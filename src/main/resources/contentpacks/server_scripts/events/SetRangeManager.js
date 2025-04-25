@@ -1,5 +1,8 @@
 //priority:101
 let CuriosFlag = Platform.isLoaded('curios')
+if (!CuriosFlag) {
+    CuriosHelper = null
+}
 /**
  * 
  * @param {string} type 
@@ -20,7 +23,9 @@ function enableSetRange(type,entity) {
             break;
         case "curios":
             if (CuriosFlag && entity.isPlayer()) {
-                returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
+                if (CuriosHelper != null) {
+                    returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
+                }
             } else {
                 returnObejct.put('curios', []);
             }
@@ -28,7 +33,9 @@ function enableSetRange(type,entity) {
         case "armor&curios":
             if (entity.isPlayer()) {
                 returnObejct.put('armor', entity.getArmorSlots());
-                returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
+                if (CuriosHelper != null) {
+                    returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
+                }
             } else {
                 returnObejct.put('armor', entity.getArmorSlots());
             }
@@ -37,7 +44,9 @@ function enableSetRange(type,entity) {
             if (entity.isPlayer()) {
                 returnObejct.put('armor', entity.getArmorSlots());
                 returnObejct.put('weapon', entity.getHandSlots());
-                returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
+                if (CuriosHelper != null) {
+                    returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
+                }
             } else {
                 returnObejct.put('armor', entity.getArmorSlots());
                 returnObejct.put('weapon', entity.getHandSlots());
@@ -81,7 +90,7 @@ SetRangeManager_.prototype.all = function() {
  * @param {Internal.ItemStack_} item 
  * @param {SlotTypes_} slot 
  */
-SetRangeManager_.prototype.addBlackList = function(item,slot) {
+SetRangeManager_.prototype.addBlacklist = function(item,slot) {
     if (this.blackList[item] == undefined) this.blackList[item] = []
     this.blackList[item].push(slot)
 }
@@ -90,7 +99,7 @@ SetRangeManager_.prototype.addBlackList = function(item,slot) {
  * @param {Internal.ItemStack_} item 
  * @param {SlotTypes_} slot 
  */
-SetRangeManager_.prototype.addWhiteList = function(item,slot) {
+SetRangeManager_.prototype.addWhitelist = function(item,slot) {
     if (this.blackList[item] == undefined) this.blackList[item] = []
     let slots = ["weapon","armor","curios"]
     slots.filter(e=>e != slot).forEach(t=>{
@@ -103,7 +112,7 @@ SetRangeManager_.prototype.addWhiteList = function(item,slot) {
  * @param {Internal.ItemStack_} item 
  * @param {SlotTypes_} slot 
  */
-SetRangeManager_.prototype.removeBlackList = function(item,slot) {
+SetRangeManager_.prototype.removeBlacklist = function(item,slot) {
     if (this.blackList[item] != undefined && this.blackList[item].find(slot) != undefined) {
         this.blackList[item] = this.blackList[item].filter(e=>e != slot)
     }
@@ -113,7 +122,7 @@ SetRangeManager_.prototype.removeBlackList = function(item,slot) {
  * @param {Internal.ItemStack_} item 
  * @param {SlotTypes_} slot 
  */
-SetRangeManager_.prototype.inBlackList = function(item,slot) {
+SetRangeManager_.prototype.inBlacklist = function(item,slot) {
     if (this.blackList[item.id] != undefined) {
         if (this.blackList[item.id].toString().includes(slot)) {
             return true

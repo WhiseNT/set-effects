@@ -14,7 +14,7 @@ function triggerSetEffects(entity,eventType,event) {
     allSlots.forEach((type,slots)=>{
         for (let item of slots) {
             //如果物品在对应槽位的黑名单中,则跳过
-            if (SetRangeManager.inBlackList(item,type)) continue
+            if (SetRangeManager.inBlacklist(item,type)) continue
             let sets = map.itemMap[item.id]
             if (sets != undefined) {
                 for (let set of sets) {
@@ -69,7 +69,7 @@ function equiptTrigger(event) {
         let allSlots = SetRangeManager.getSlots(event.entity)
         allSlots.forEach((type,slots)=>{
             for (const item of slots) {
-                if (SetRangeManager.inBlackList(item,type)) continue
+                if (SetRangeManager.inBlacklist(item,type)) continue
                 if (item.id != equiptArmor) {
                     let sets = map.itemMap[item.id];
                     if (sets != undefined) {
@@ -142,7 +142,7 @@ function unequiptTrigger(event) {
         let allSlots = SetRangeManager.getSlots(event.entity)
         allSlots.forEach((type,slots)=>{
             for (const item of slots) {
-                if (SetRangeManager.inBlackList(item,type)) continue
+                if (SetRangeManager.inBlacklist(item,type)) continue
                 if (item.id != unequiptArmor) {
                     // 处理仍然装备的装备
                     let sets = map.itemMap[item.id];
@@ -198,16 +198,14 @@ function unequiptTrigger(event) {
  * @param {Internal.LivingEvent$LivingTickEvent_} event 
  */
 global.SetEffectsTick = function(event) {
+    if (Shared && !Shared.enableTick) return
     if (event.entity.isPlayer()) {
         triggerSetEffects(event.entity,'tick',event)
-        triggerSetEffects(event.entity,'effect',event)
     }
 }
 EntityEvents.spawned(event=>{
     if (event.entity.isLiving()) {
         triggerSetEffects(event.entity,'unequipt',event)
-        /**@type {Internal.LivingEntity_} */
-        let entity = event.entity
     }
 })
 /**
