@@ -14,7 +14,6 @@ SetEvents_.prototype.registry = function (event) {
     this.hooks["registry"].push(event)
     this._triggerRegistry(setRegisterInstance)
 }
-
 SetEvents_.prototype._triggerRegistry = function (setRegisterInstance) {
     const reg = this.hooks["registry"]
     if (reg && reg.length > 0) {
@@ -27,7 +26,6 @@ SetEvents_.prototype._triggerRegistry = function (setRegisterInstance) {
         });
     }
     SetEffectsDataUpdater.update(map)
-    
 };
 SetEvents_.prototype.modification = function (event) {
     if (this.hooks["modification"] == undefined) this.hooks["modification"] = []

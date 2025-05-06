@@ -1,7 +1,9 @@
 //priority:101
 let CuriosFlag = Platform.isLoaded('curios')
 let CuriosHelper = null
-if (!CuriosFlag) {
+let $CuriosAPI = null
+if (CuriosFlag) {
+    $CuriosAPI = Java.loadClass('top.theillusivec4.curios.api.CuriosApi')
     CuriosHelper = {
         /**
          * 玩家饰品栏相关功能组
@@ -35,16 +37,19 @@ function enableSetRange(type,entity) {
     switch (type) {
         case "armor":
             returnObejct.put('armor', entity.getArmorSlots());
+            //if (entity.isPlayer()) entity.sendData('SE_ArmorRnnge',{range:"armor&weapon"})
             break;
         case "weapon":
             returnObejct.put('weapon', entity.getHandSlots());
+            //if (entity.isPlayer()) entity.sendData('SE_ArmorRnnge',{range:"armor&weapon"})
             break;
         case "armor&weapon":
             returnObejct.put('armor', entity.getArmorSlots());
             returnObejct.put('weapon', entity.getHandSlots());
+            //if (entity.isPlayer()) entity.sendData('SE_ArmorRnnge',{range:"armor&weapon"})
             break;
         case "curios":
-            if (CuriosFlag && entity.isPlayer()) {
+            if (CuriosFlag && entity.isLiving()) {
                 if (CuriosHelper != null) {
                     returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
                 }
@@ -53,9 +58,9 @@ function enableSetRange(type,entity) {
             }
             break;
         case "armor&curios":
-            if (entity.isPlayer()) {
+            if (entity.isLiving()) {
                 returnObejct.put('armor', entity.getArmorSlots());
-                if (CuriosHelper != null) {
+                if (CuriosHelper != null  && entity.isPlayer()) {
                     returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
                 }
             } else {
@@ -63,10 +68,11 @@ function enableSetRange(type,entity) {
             }
             break;
         case "all":
-            if (entity.isPlayer()) {
+            if (entity.isLiving()) {
                 returnObejct.put('armor', entity.getArmorSlots());
                 returnObejct.put('weapon', entity.getHandSlots());
-                if (CuriosHelper != null) {
+                
+                if (CuriosHelper != null && entity.isPlayer()) {
                     returnObejct.put('curios', CuriosHelper.PlayerInv.getEquippedCurios(entity));
                 }
             } else {
@@ -127,7 +133,6 @@ SetRangeManager_.prototype.addWhitelist = function(item,slot) {
     slots.filter(e=>e != slot).forEach(t=>{
         this.blackList[item].push(t)
     })
-    
 }
 /**
  * 

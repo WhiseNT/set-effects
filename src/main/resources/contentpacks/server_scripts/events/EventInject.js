@@ -16,13 +16,17 @@ function triggerSetEffects(entity,eventType,event) {
             //如果物品在对应槽位的黑名单中,则跳过
             if (SetRangeManager.inBlacklist(item,type)) continue
             let sets = map.itemMap[item.id]
+            
             if (sets != undefined) {
                 for (let set of sets) {
-                    if (countsMap[set.id] == undefined) countsMap[set.id] = 1;
+                    if (countsMap[set.id] == undefined) countsMap[set.id] = 0;
                     countsMap[set.id] += 1;
+                    
+
                     if (countsMap[set.id] === set.counts) {
                         setsToTrigger.push(set)
                     }
+                    
                 } 
             } else continue;
         }
@@ -67,10 +71,27 @@ function equiptTrigger(event) {
         let equiptArmor = event.to.id
         let flag = false
         let allSlots = SetRangeManager.getSlots(event.entity)
+        let toClientObject = {
+            armor: allSlots.getOrDefault('armor', null) 
+                ? allSlots.getOrDefault('armor', null).map(item => item.id) 
+                : null,
+            weapon: allSlots.getOrDefault('weapon', null) 
+                ? allSlots.getOrDefault('weapon', null).map(item => item.id) 
+                : null,
+            curios: allSlots.getOrDefault('curios', null) 
+                ? allSlots.getOrDefault('curios', null).map(item => item.id) 
+                : null
+        };
+        let toClientBlacklistObject = SetRangeManager.blackList
+        if (event.entity.isPlayer()) {
+            event.entity.sendData('SE_Range',toClientObject)
+            event.entity.sendData('SE_Blacklist',toClientBlacklistObject)
+        }
         allSlots.forEach((type,slots)=>{
             for (const item of slots) {
                 if (SetRangeManager.inBlacklist(item,type)) continue
                 if (item.id != equiptArmor) {
+                    
                     let sets = map.itemMap[item.id];
                     if (sets != undefined) {
                         sets.forEach(set => { 
@@ -140,6 +161,23 @@ function unequiptTrigger(event) {
         let unequiptArmor = event.from.id; // 脱下的装备 ID
         let flag = false
         let allSlots = SetRangeManager.getSlots(event.entity)
+        let toClientObject = {
+            armor: allSlots.getOrDefault('armor', null) 
+                ? allSlots.getOrDefault('armor', null).map(item => item.id) 
+                : null,
+            weapon: allSlots.getOrDefault('weapon', null) 
+                ? allSlots.getOrDefault('weapon', null).map(item => item.id) 
+                : null,
+            curios: allSlots.getOrDefault('curios', null) 
+                ? allSlots.getOrDefault('curios', null).map(item => item.id) 
+                : null
+        };
+        
+        let toClientBlacklistObject = SetRangeManager.blackList
+        if (event.entity.isPlayer()) {
+            event.entity.sendData('SE_Range',toClientObject)
+            event.entity.sendData('SE_Blacklist',toClientBlacklistObject)
+        }
         allSlots.forEach((type,slots)=>{
             for (const item of slots) {
                 if (SetRangeManager.inBlacklist(item,type)) continue
@@ -198,12 +236,18 @@ function unequiptTrigger(event) {
  * @param {Internal.LivingEvent$LivingTickEvent_} event 
  */
 global.SetEffectsTick = function(event) {
-    if (Shared && !Shared.enableTick) return
-    if (event.entity.isPlayer()) {
+    if (Shared && (Shared.enableTick == false)) return
+    if (event.entity.isLiving()) {
+        
         triggerSetEffects(event.entity,'tick',event)
     }
 }
 EntityEvents.spawned(event=>{
+    if (event.entity.isLiving()) {
+        triggerSetEffects(event.entity,'unequipt',event)
+    }
+})
+EntityEvents.death(event=>{
     if (event.entity.isLiving()) {
         triggerSetEffects(event.entity,'unequipt',event)
     }

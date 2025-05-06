@@ -27,7 +27,11 @@ function EffectiveSet(items,id) {
     /**@type {SetsMap} */
     const SetsMap = ContentPacks.getShared('server','com.whisent.seteffects').setsMap
     SetsMap.add(this.id,this)
-    this.shadow = new ShadowSetObject(this.id,'Default Name',items)
+    this.shadow = {
+        id:this.id,
+        name:"Default Name",
+        items:items
+    }
     items.forEach(item=>{
         SetsMap.addItem(item,this)
     })
@@ -147,7 +151,10 @@ SetsMap.prototype.addItem = function(item,set) {
     if (this.itemMap[item] == undefined) {
         this.itemMap.put(item,[])
     }
-    this.itemMap[item].push(set)
+    
+    if (this.itemMap[item].find(t=>t.id == set.id) == undefined) {
+        this.itemMap[item].push(set)
+    }
 }
 
 

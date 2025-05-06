@@ -6,10 +6,13 @@ function DataUpdater() {
 DataUpdater.prototype.update = function(map) {
     map.itemMap.forEach((itemId,sets)=>{
         sets.forEach(set=>{
-            let obj = JSON.stringify(set.shadow)
+            let obj = set.shadow
             this.SetsMap.putIfAbsent(set.id,obj)
             this.ItemsMap.putIfAbsent(itemId,[])
-            this.ItemsMap.get(itemId).push(set.id)
+            const a = []
+            if (this.ItemsMap.get(itemId).find(e=>e == set.id) == undefined) {
+                this.ItemsMap.get(itemId).push(set.id)
+            }
         })
     })
 }
@@ -23,6 +26,7 @@ PlayerEvents.loggedIn(event=>{
     })
 })
 NetworkEvents.dataReceived('SetsEffectServer',event=>{
+
     event.player.sendData('SetsEffectClient',{sets:SetEffectsDataUpdater.SetsMap,items:SetEffectsDataUpdater.ItemsMap})
 })
 
