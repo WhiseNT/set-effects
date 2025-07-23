@@ -7,35 +7,38 @@
  * @returns 
  */
 function triggerSetEffects(entity,eventType,event) {
-    if (entity == null || entity.level.isClientSide()) return
-    let countsMap = {}
-    let setsToTrigger = []
-    let allSlots = SetRangeManager.getSlots(entity)
-    allSlots.forEach((type,slots)=>{
-        for (let item of slots) {
-            //如果物品在对应槽位的黑名单中,则跳过
-            if (SetRangeManager.inBlacklist(item,type)) continue
-            let sets = map.itemMap[item.id]
-            
-            if (sets != undefined) {
-                for (let set of sets) {
-                    if (countsMap[set.id] == undefined) countsMap[set.id] = 0;
-                    countsMap[set.id] += 1;
-                    
-
-                    if (countsMap[set.id] === set.counts) {
-                        setsToTrigger.push(set)
-                    }
-                    
-                } 
-            } else continue;
+    if (entity != null && !entity.level.isClientSide()) {
+        let countsMap = {}
+        let setsToTrigger = []
+        if (SetRangeManager != undefined) {
+            let allSlots = SetRangeManager.getSlots(entity)
+            allSlots.forEach((type,slots)=>{
+                for (let item of slots) {
+                    //如果物品在对应槽位的黑名单中,则跳过
+                    if (SetRangeManager.inBlacklist(item,type)) continue
+                    let sets = map.itemMap[item.id]
+                    if (sets != undefined) {
+                        for (let set of sets) {
+                            if (countsMap[set.id] == undefined) countsMap[set.id] = 0;
+                            countsMap[set.id] += 1;
+                            
+        
+                            if (countsMap[set.id] === set.counts) {
+                                setsToTrigger.push(set)
+                            }
+                            
+                        } 
+                    } else continue;
+                }
+            })
+            if (setsToTrigger.length === 0) return
+            for (const set of setsToTrigger) {
+                set.triggerFactory(eventType, event, set)
+            }
         }
-    })
-    
-    if (setsToTrigger.length === 0) return
-    for (const set of setsToTrigger) {
-        set.triggerFactory(eventType, event, set)
+        
     }
+    
 }
 /**
  * 
@@ -243,7 +246,7 @@ global.SetEffectsTick = function(event) {
     }
 }
 EntityEvents.spawned(event=>{
-    if (event.entity.isLiving()) {
+    if (event.entity.isPlayer()) {
         triggerSetEffects(event.entity,'unequipt',event)
     }
 })

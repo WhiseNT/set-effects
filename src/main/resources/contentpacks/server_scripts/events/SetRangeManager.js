@@ -9,24 +9,24 @@ if (CuriosFlag) {
          * 玩家饰品栏相关功能组
          */
         PlayerInv:{
-            /**
-             * 返回玩家的饰品Inventory
-             * @param {Internal.Player_} player 玩家
-             */
             inv:function(player) {
-                return $CuriosAPI.getCuriosInventory(player).resolve().get()
+                return $CuriosAPI.getCuriosInventory(player)
             },
             /**
              * 返回玩家所有已装备的饰品
              * @param {Internal.Player_} player 玩家
              */
             getEquippedCurios:function(player) {
-                /**@type {Internal.CuriosApi_} */
-                return this.inv(player).getEquippedCurios().allItems
+                if (this.inv(player).isPresent()) {
+                    return this.inv(player).resolve().get().getEquippedCurios().allItems
+                }
+                return []
+                //return this.inv(player).getEquippedCurios().allItems
             }
         }
     }
 }
+
 /**
  * 
  * @param {string} type 

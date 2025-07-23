@@ -50,7 +50,7 @@ SetsTooltipInjectHelper.prototype.triggerFactory = function(type,event,item,adva
             func(event,item,advance,text,set,count)
         })
     }
-    
+
 }
 
 const TooltipHelperInstance = new SetsTooltipInjectHelper()

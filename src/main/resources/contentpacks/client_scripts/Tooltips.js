@@ -23,7 +23,7 @@ const TooltipManager = new SetsTooltipsManager()
 
 NetworkEvents.dataReceived('SetsEffectClient',event=>{
     TooltipManager.setsMap = event.data.sets
-    
+
     TooltipManager.itemsMap = event.data.items
 })
 ItemEvents.tooltip(event=>{
@@ -50,12 +50,12 @@ function displayTooltip (event) {
                 if (!TooltipHelperInstance.getItemFlag(item.id)) return
                 let len = 1
                 sets.map(id=>id.asString).forEach(/**@param {Internal.StringTag_} setId*/setId=>{
-                        /**@type {ShadowSetObject} */
-                        let set = TooltipManager.setsMap[setId]
-                        let count = 0
-                        if (TooltipHelperInstance.getFlag('shift',setId)) {
+                    /**@type {ShadowSetObject} */
+                    let set = TooltipManager.setsMap[setId]
+                    let count = 0
+                    if (TooltipHelperInstance.getFlag('shift',setId)) {
                         if (set != undefined) text.add(1,Text.translatable("tooltip.set_effects.set",set.name).aqua()); else {
-                            
+
                         }
                         set.items.forEach(item=>{
                             len++
@@ -69,16 +69,16 @@ function displayTooltip (event) {
                                         count +=1
                                     }
                                 }
-                                    
+
                             })
-                            
+
                         })
                         TooltipHelperInstance.triggerFactory("shift",event,item,advance,text,set,count)
-                        }
-                    
+                    }
+
                 })
             } else {
-                if (TooltipHelperInstance.getItemFlag(item.id)){
+                if (TooltipHelperInstance.getItemFlag(item.id) || TooltipHelperInstance.getFlag('shift')){
                     text.add(1,Text.translatable("tooltip.set_effects.shift").aqua())
                 }
                 sets.map(id=>id.asString).forEach(setId=>{
