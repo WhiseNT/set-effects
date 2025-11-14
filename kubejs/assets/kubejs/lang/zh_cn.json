@@ -1,0 +1,17 @@
+{
+    "tag.forge.armors.helmets":"任意头盔",
+
+    "tag.minecraft.swords":"任意剑",
+
+    "set.example.leather_set":"皮革",
+    "set.example.iron_set":"铁",
+    "set.example.gold_set":"金",
+    "set.example.diamond_set":"钻石",
+    "set.example.netherite_set":"下界合金",
+    "set.example.shield_set":"盾剑",
+
+    "tooltip.example.four_pieces":"四件套:",
+    "tooltip.example.two_pieces":"二件套",
+
+    "tooltip.example.equipment_set":"生效时:"
+}

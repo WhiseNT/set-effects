@@ -1,0 +1,139 @@
+//priority:100
+
+const $UUID = Java.loadClass('java.util.UUID')
+const $AttributeModifier = Java.loadClass('net.minecraft.world.entity.ai.attributes.AttributeModifier')
+
+function EffectiveSet(items,id) {
+    this.id = id
+    this.items = items
+    this.counts = items.length
+    this.potionEffects = []
+    this.attributes = []
+    this.hooks = {
+        effect:[],
+        hurt:[],
+        heal:[],
+        attack:[],
+        tick:[],
+        fall:[],
+        jump:[],
+        spawn:[],
+        death:[],
+        equipt:[],
+        unequipt:[],
+        active:[]
+    }
+    /**@type {SetsMap} */
+    const SetsMap = ContentPacks.getShared('server','com.whisent.seteffects.SetEffects').setsMap
+    SetsMap.add(this.id,this)
+    let fixedItems = []
+    items.forEach(item=>{
+        if (item.startsWith("#")) {
+            fixedItems.push(item)
+            SetsMap.addTag(item,this)
+        } else {
+            let itemFix = item
+            if (!item.includes(":")) {
+                itemFix = "minecraft:" + item
+            }
+            fixedItems.push(itemFix)
+            SetsMap.addItem(itemFix,this)
+        }
+    })
+    this.shadow = {
+        id:this.id,
+        items:fixedItems
+    }
+}
+EffectiveSet.prototype.setCounts = function(number) {
+    this.counts = number
+    return this
+}
+EffectiveSet.prototype.getShadow = function() {
+    return this.shadow
+}
+/**
+ * 
+ * @param {Internal.MobEffect_} mobEffect 
+ * @param {Number} amplifier 
+ * @param {Boolean} ambient 
+ * @param {Boolean} showParticles 
+ */
+EffectiveSet.prototype.addPotionEffect = function(mobEffect,amplifier,ambient,showParticles) {
+    let obj = {
+        mobEffect:mobEffect,
+        amplifier:amplifier,
+        ambient:ambient,
+        showParticles:showParticles
+    }
+    this.potionEffects.push(obj)
+    return this
+}
+/**
+ * 
+ * @param {Internal.Attribute_} attribute 
+ * @param {UUID_} uuid
+ * @param {Number} d 
+ * @param {Internal.AttributeModifier$Operation_} operation 
+ */
+EffectiveSet.prototype.addAttribute = function(attribute,uuid,d,operation) {
+    let modifier = new $AttributeModifier(uuid,this.id,d,operation)
+    let obj = {
+        attribute:attribute,
+        modifier:modifier,
+        uuid:uuid
+    }
+    this.attributes.push(obj)
+    return this
+}
+/**
+ * 
+ * @param {String} eventType 
+ * @param {*} event 
+ * @param {EffectiveSet} set 
+ */
+EffectiveSet.prototype.triggerFactory = function(eventType,event,set) {
+    const hook = this.hooks[eventType]
+    if (hook && hook.length > 0) {
+        hook.forEach(func => {
+            func(event,set)
+        });
+    }
+}
+EffectiveSet.prototype.injectHurtFunc = function(callback) {
+    this.hooks.hurt.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectAttackFunc = function(callback) {
+    this.hooks.attack.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectEquiptFunc = function(callback) {
+    this.hooks.equipt.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectUnequiptFunc = function(callback) {
+    this.hooks.unequipt.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectTickFunc = function(callback) {
+    this.hooks.tick.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectHealFunc = function(callback) {
+    this.hooks.heal.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectJumpFunc = function(callback) {
+    this.hooks.jump.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectFallFunc = function(callback) {
+    this.hooks.fall.push(callback)
+    return this
+}
+EffectiveSet.prototype.injectDeathFunc = function(callback) {
+    this.hooks.death.push(callback)
+    return this
+}
+
