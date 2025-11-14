@@ -15,13 +15,6 @@ declare namespace SE {
         isActive(entity: Internal.LivingEntity_, setId: string): boolean;
 
     }
-    declare class SetEffectsShared {
-        public EffectiveSet: EffectiveSet;
-        public setsMap: SetsMap;
-        public setRangeManager: SetRangeManager_;
-        public setApi: SetApi;
-        public setEvents: SetEventJS;
-
-    }
+    
 
 }

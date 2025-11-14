@@ -17,12 +17,16 @@ let SetEffectsMetaData =
             .withAuthors(["WhiseNT"])
             .withName("Set Effects")
             .withDescription("This is a ContentPack Mod that allows you to customize the effects of full armor sets.")
-            .withVersion("1.0.3-alpha")
+            .withVersion("1.0.5")
             .addDependency(kubejsDependency)
             .addDependency(curiosDependency)
+            .addDependency(kubeloaderDependency)
             .build();
 
 let SetEffectsModInfo = 
     ModGen.createModInfo("set_effects",SetEffectsMetaData).fromMetaData()
+            .withVersion("1.0.5")
             .withLicense("MIT License")
-            .withIssuePage()
+            .withIssuePage("https://github.com/WhiseNT/set-effects/issues")
+            .withHomepage("https://github.com/WhiseNT/set-effects")
+            .build()

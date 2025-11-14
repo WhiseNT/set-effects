@@ -1,5 +1,5 @@
 //首先需要从Shared中获取SetEffects对象
-/**@type {SE.SetEffectsShared} */
+
 const SEShared = ContentPacks.getShared('server','com.whisent.seteffects.SetEffects')
 
 //在获取SetEffects对象后，可以获取SetEvents对象。
